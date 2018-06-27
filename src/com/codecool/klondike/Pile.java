@@ -8,6 +8,7 @@ import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.ListIterator;
 
@@ -41,8 +42,7 @@ public class Pile extends Pane {
     }
 
     public int numOfCards() {
-        //TODO
-        return 1;
+       return this.getCards().size();
     }
 
     public boolean isEmpty() {
@@ -51,6 +51,14 @@ public class Pile extends Pane {
 
     public void clear() {
         //TODO
+        this.cards = FXCollections.observableArrayList();
+    }
+
+    public void reversePile() {
+        Collections.reverse(cards);
+        for (Card card : cards) {
+            card.toFront();
+        }
     }
 
     public void addCard(Card card) {
