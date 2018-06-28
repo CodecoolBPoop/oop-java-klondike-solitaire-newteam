@@ -88,8 +88,13 @@ public class Game extends Pane {
     };
 
     public boolean isGameWon() {
-        //TODO
-        return false;
+        for (Pile pile : foundationPiles) {
+            if (pile.numOfCards() != 13) {
+                return false;
+            }
+            break;
+        }
+        return true;
     }
 
     public Game() {
