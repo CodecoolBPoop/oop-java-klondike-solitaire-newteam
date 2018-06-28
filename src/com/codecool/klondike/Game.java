@@ -43,6 +43,15 @@ public class Game extends Pane {
             card.setMouseTransparent(false);
             System.out.println("Placed " + card + " to the waste.");
         }
+        if (e.getClickCount() % 2 == 0 && !e.isConsumed()) {
+            for (Pile pile : foundationPiles){
+                if (card.getRank().equals(Rank.ACE) && pile.isEmpty()){
+                    card.moveToPile(pile);
+                } else if (pile.getTopCard() != null && card.isSameSuit(card, pile.getTopCard()) && (pile.getTopCard().getRank().getValue()+1) == card.getRank().getValue()){
+                    card.moveToPile(pile);
+                }
+            }
+        }
     };
 
     private EventHandler<MouseEvent> stockReverseCardsHandler = e -> {
@@ -177,9 +186,7 @@ public class Game extends Pane {
         }
         System.out.println(msg);
         MouseUtil.slideToDest(draggedCards, destPile);
-        for(Pile item : tableauPiles){
-            item.flipLastTableauCard();
-        }
+
         draggedCards.clear();
     }
 
