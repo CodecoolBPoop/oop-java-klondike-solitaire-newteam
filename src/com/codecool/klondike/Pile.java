@@ -41,8 +41,7 @@ public class Pile extends Pane {
     }
 
     public int numOfCards() {
-        //TODO
-        return 1;
+        return this.getCards().size();
     }
 
     public boolean isEmpty() {
@@ -82,6 +81,10 @@ public class Pile extends Pane {
         GaussianBlur gaussianBlur = new GaussianBlur(10);
         setBackground(background);
         setEffect(gaussianBlur);
+    }
+
+    public void flipLastTableauCard() {
+
     }
 
     public enum PileType {
