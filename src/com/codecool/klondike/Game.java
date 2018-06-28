@@ -45,7 +45,7 @@ public class Game extends Pane {
             card.setMouseTransparent(false);
             System.out.println("Placed " + card + " to the waste.");
         }
-        if (e.getClickCount() % 2 == 0 && !e.isConsumed() && card.getContainingPile().getPileType() != Pile.PileType.STOCK) {
+        else if (e.getClickCount() % 2 == 0 && !e.isConsumed() && card.getContainingPile().getPileType() != Pile.PileType.STOCK) {
             for (Pile pile : foundationPiles){
                 if (card.getRank().equals(Rank.ACE) && pile.isEmpty()){
                     int cardIndex = deck.indexOf(card);
