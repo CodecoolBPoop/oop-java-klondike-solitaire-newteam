@@ -45,7 +45,7 @@ public class Game extends Pane {
         }
         if (e.getClickCount() % 2 == 0 && !e.isConsumed()) {
             for (Pile pile : foundationPiles){
-                if (card.getRank().equals(Rank.ACE) && pile.isEmpty()){
+                if (card.getRank().equals(Rank.ACE) && pile.isEmpty() && card.getContainingPile().getPileType() != Pile.PileType.STOCK){
                     card.moveToPile(pile);
                 } else if (pile.getTopCard() != null && card.isSameSuit(card, pile.getTopCard()) && (pile.getTopCard().getRank().getValue()+1) == card.getRank().getValue()){
                     card.moveToPile(pile);
