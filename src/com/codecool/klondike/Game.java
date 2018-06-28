@@ -12,6 +12,8 @@ import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.Pane;
+import javafx.scene.control.Button;
+import javafx.event.ActionEvent;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -114,6 +116,7 @@ public class Game extends Pane {
         deck = Card.createNewDeck();
         initPiles();
         dealCards();
+        initRestart();
     }
 
     public void addMouseEventHandlers(Card card) {
@@ -254,4 +257,32 @@ public class Game extends Pane {
                 BackgroundPosition.CENTER, BackgroundSize.DEFAULT)));
     }
 
+    public void initRestart() {
+        Button restart_btn = new Button();
+        restart_btn.setLayoutX(0);
+        restart_btn.setLayoutY(680);
+        restart_btn.setPrefWidth(150);
+        restart_btn.setPrefHeight(50);
+        restart_btn.setText("Restart Game");
+        restart_btn.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                restartGame();
+            }
+        });
+        getChildren().add(restart_btn);
+    }
+
+    public void restartGame() {
+        stockPile.clear();
+        discardPile.clear();
+        foundationPiles.clear();
+        tableauPiles.clear();
+        getChildren().clear();
+        deck = Card.createNewDeck();
+        initPiles();
+        dealCards();
+        initRestart();
+    }
 }
+
