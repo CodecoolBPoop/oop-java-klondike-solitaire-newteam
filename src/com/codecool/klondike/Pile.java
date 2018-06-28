@@ -50,7 +50,6 @@ public class Pile extends Pane {
     }
 
     public void clear() {
-        //TODO
         this.cards = FXCollections.observableArrayList();
     }
 
@@ -92,9 +91,6 @@ public class Pile extends Pane {
         setEffect(gaussianBlur);
     }
 
-    public void flipLastTableauCard() {
-
-    }
 
     public enum PileType {
         STOCK,
