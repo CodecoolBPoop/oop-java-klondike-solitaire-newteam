@@ -117,11 +117,20 @@ public class Game extends Pane {
             draggedCards.forEach(MouseUtil::slideBack);
             draggedCards.clear();
         }
+        if (isGameWon() == false) {
+            return;
+        } else
+            restartGame();
     };
 
     public boolean isGameWon() {
-        //TODO
-        return false;
+        boolean gameWon = true;
+        for (Pile pile : foundationPiles) {
+            if (pile.numOfCards() != 13 || pile.isEmpty()) {
+                gameWon = false;
+            }
+        }
+        return gameWon;
     }
 
     public Game() {
