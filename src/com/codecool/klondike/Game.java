@@ -84,6 +84,12 @@ public class Game extends Pane {
         }
         if (pile != null) {
             handleValidMove(card, pile);
+            int cardIndex = deck.indexOf(card);
+            Card nextCard = deck.get(cardIndex-1);
+            if (card.getContainingPile() == nextCard.getContainingPile()) {
+                nextCard.flip();
+                addMouseEventHandlers(nextCard);
+            }
         } else {
             draggedCards.forEach(MouseUtil::slideBack);
             draggedCards.clear();
@@ -171,6 +177,9 @@ public class Game extends Pane {
         }
         System.out.println(msg);
         MouseUtil.slideToDest(draggedCards, destPile);
+        for(Pile item : tableauPiles){
+            item.flipLastTableauCard();
+        }
         draggedCards.clear();
     }
 
@@ -214,10 +223,10 @@ public class Game extends Pane {
             for (int i = 0; i < turn + 1; i++) {
                 Card card = deckIterator.next();
                 tableauPiles.get(turn).addCard(card);
-                addMouseEventHandlers(card);
                 getChildren().add(card);
                 if (i == turn) {
                     card.flip();
+                    addMouseEventHandlers(card);
                 }
             }
             turn++;
