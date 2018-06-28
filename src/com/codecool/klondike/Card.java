@@ -43,7 +43,7 @@ public class Card extends ImageView {
     }
 
     public boolean isFaceDown() {
-        return faceDown;
+        return false;
     }
 
     public String getShortName() {
