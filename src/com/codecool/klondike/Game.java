@@ -48,20 +48,10 @@ public class Game extends Pane {
         else if (e.getClickCount() % 2 == 0 && !e.isConsumed() && card.getContainingPile().getPileType() != Pile.PileType.STOCK) {
             for (Pile pile : foundationPiles){
                 if (card.getRank().equals(Rank.ACE) && pile.isEmpty()){
-                    int cardIndex = deck.indexOf(card);
-                    Card nextCard = deck.get(cardIndex-1);
-                    if (card.getContainingPile() == nextCard.getContainingPile()) {
-                        nextCard.flip();
-                        addMouseEventHandlers(nextCard);
-                    }
+                    flipNextCard(card);
                     card.moveToPile(pile);
                 } else if (pile.getTopCard() != null && card.isSameSuit(card, pile.getTopCard()) && (pile.getTopCard().getRank().getValue()+1) == card.getRank().getValue()){
-                    int cardIndex = deck.indexOf(card);
-                    Card nextCard = deck.get(cardIndex-1);
-                    if (card.getContainingPile() == nextCard.getContainingPile()) {
-                        nextCard.flip();
-                        addMouseEventHandlers(nextCard);
-                    }
+                    flipNextCard(card);
                     card.moveToPile(pile);
                 }
             }
@@ -118,16 +108,18 @@ public class Game extends Pane {
         if (pile != null) {
             handleValidMove(card, pile);
             int cardIndex = deck.indexOf(card);
-            Card nextCard = deck.get(cardIndex-1);
-            if (card.getContainingPile() == nextCard.getContainingPile()) {
-                nextCard.flip();
-                addMouseEventHandlers(nextCard);
-            }
-            else if (card.getContainingPile().getPileType() == Pile.PileType.DISCARD && discardPile.numOfCards() == 1){
-                Card nextStockCard = stockPile.getTopCard();
-                nextStockCard.moveToPile(discardPile);
-                nextStockCard.flip();
-                nextStockCard.setMouseTransparent(false);
+            if(cardIndex > 0){
+                Card nextCard = deck.get(cardIndex-1);
+                if (card.getContainingPile() == nextCard.getContainingPile()) {
+                    nextCard.flip();
+                    addMouseEventHandlers(nextCard);
+                }
+                else if (card.getContainingPile().getPileType() == Pile.PileType.DISCARD && discardPile.numOfCards() == 1){
+                    Card nextStockCard = stockPile.getTopCard();
+                    nextStockCard.moveToPile(discardPile);
+                    nextStockCard.flip();
+                    nextStockCard.setMouseTransparent(false);
+                }
             }
         } else {
             draggedCards.forEach(MouseUtil::slideBack);
@@ -229,6 +221,16 @@ public class Game extends Pane {
         draggedCards.clear();
     }
 
+    private void flipNextCard(Card card) {
+        int cardIndex = deck.indexOf(card);
+        if(cardIndex > 0) {
+            Card nextCard = deck.get(cardIndex - 1);
+            if (card.getContainingPile() == nextCard.getContainingPile()) {
+                nextCard.flip();
+                addMouseEventHandlers(nextCard);
+            }
+        }
+    }
 
     private void initPiles() {
         stockPile = new Pile(Pile.PileType.STOCK, "Stock", STOCK_GAP);
