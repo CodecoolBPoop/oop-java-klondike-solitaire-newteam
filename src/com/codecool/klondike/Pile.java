@@ -8,6 +8,7 @@ import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.ListIterator;
 
@@ -21,6 +22,7 @@ public class Pile extends Pane {
     public Pile(PileType pileType, String name, double cardGap) {
         this.pileType = pileType;
         this.cardGap = cardGap;
+        this.name = name;
     }
 
     public PileType getPileType() {
@@ -40,8 +42,7 @@ public class Pile extends Pane {
     }
 
     public int numOfCards() {
-        //TODO
-        return 1;
+       return this.getCards().size();
     }
 
     public boolean isEmpty() {
@@ -50,6 +51,14 @@ public class Pile extends Pane {
 
     public void clear() {
         //TODO
+        this.cards = FXCollections.observableArrayList();
+    }
+
+    public void reversePile() {
+        Collections.reverse(cards);
+        for (Card card : cards) {
+            card.toFront();
+        }
     }
 
     public void addCard(Card card) {
@@ -81,6 +90,10 @@ public class Pile extends Pane {
         GaussianBlur gaussianBlur = new GaussianBlur(10);
         setBackground(background);
         setEffect(gaussianBlur);
+    }
+
+    public void flipLastTableauCard() {
+
     }
 
     public enum PileType {
