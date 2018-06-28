@@ -14,6 +14,7 @@ import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.Pane;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -78,7 +79,9 @@ public class Game extends Pane {
             return;
         Card card = (Card) e.getSource();
         Pile pile = getValidIntersectingPile(card, tableauPiles);
-        //TODO
+        if (pile == null) {
+            pile = getValidIntersectingPile(card, foundationPiles);
+        }
         if (pile != null) {
             handleValidMove(card, pile);
             int cardIndex = deck.indexOf(card);
@@ -89,7 +92,7 @@ public class Game extends Pane {
             }
         } else {
             draggedCards.forEach(MouseUtil::slideBack);
-            draggedCards = null;
+            draggedCards.clear();
         }
     };
 
@@ -112,14 +115,38 @@ public class Game extends Pane {
     }
 
     public void refillStockFromDiscard() {
-        //TODO
+        if(stockPile.isEmpty()) {
+            for (Card card : discardPile.getCards()) {
+                stockPile.addCard(card);
+                card.flip();
+            }
+            stockPile.reversePile();
+            discardPile.clear();
+        }
         System.out.println("Stock refilled from discard pile.");
     }
 
     public boolean isMoveValid(Card card, Pile destPile) {
-        //TODO
-        return true;
+        if (destPile.getPileType() == Pile.PileType.FOUNDATION && destPile.isEmpty() && card.getRank() == Rank.ACE )  {
+            return true;
+        }
+        else if (destPile.getPileType() == Pile.PileType.FOUNDATION && card.isSameSuit(card, destPile.getTopCard())
+                && destPile.getTopCard().getRank().getValue() +1 == card.getRank().getValue() && destPile.getTopCard() != null)   {
+            return true;
+        }
+
+        else if (destPile.getPileType() == Pile.PileType.TABLEAU && destPile.isEmpty() && card.getRank() == Rank.KING ) {
+            return true;
+        }
+        else if (destPile.getPileType() == Pile.PileType.TABLEAU && card.isOppositeColor(card, destPile.getTopCard())
+                && destPile.getTopCard().getRank().getValue() -1 == card.getRank().getValue() && destPile.getTopCard() != null)   {
+            return true;
+        }
+        else {
+            return false;
+        }
     }
+
     private Pile getValidIntersectingPile(Card card, List<Pile> piles) {
         Pile result = null;
         for (Pile pile : piles) {
