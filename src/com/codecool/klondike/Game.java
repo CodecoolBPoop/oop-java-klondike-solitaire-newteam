@@ -94,16 +94,20 @@ public class Game extends Pane {
             draggedCards.forEach(MouseUtil::slideBack);
             draggedCards.clear();
         }
+        if (isGameWon() == false) {
+            return;
+        } else
+            restartGame();
     };
 
     public boolean isGameWon() {
+        boolean gameWon = true;
         for (Pile pile : foundationPiles) {
-            if (pile.numOfCards() != 13) {
-                return false;
+            if (pile.numOfCards() != 13 || pile.isEmpty()) {
+                gameWon = false;
             }
-            break;
         }
-        return true;
+        return gameWon;
     }
 
     public Game() {
