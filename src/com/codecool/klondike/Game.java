@@ -45,6 +45,27 @@ public class Game extends Pane {
             card.setMouseTransparent(false);
             System.out.println("Placed " + card + " to the waste.");
         }
+        if (e.getClickCount() % 2 == 0 && !e.isConsumed() && card.getContainingPile().getPileType() != Pile.PileType.STOCK) {
+            for (Pile pile : foundationPiles){
+                if (card.getRank().equals(Rank.ACE) && pile.isEmpty()){
+                    int cardIndex = deck.indexOf(card);
+                    Card nextCard = deck.get(cardIndex-1);
+                    if (card.getContainingPile() == nextCard.getContainingPile()) {
+                        nextCard.flip();
+                        addMouseEventHandlers(nextCard);
+                    }
+                    card.moveToPile(pile);
+                } else if (pile.getTopCard() != null && card.isSameSuit(card, pile.getTopCard()) && (pile.getTopCard().getRank().getValue()+1) == card.getRank().getValue()){
+                    int cardIndex = deck.indexOf(card);
+                    Card nextCard = deck.get(cardIndex-1);
+                    if (card.getContainingPile() == nextCard.getContainingPile()) {
+                        nextCard.flip();
+                        addMouseEventHandlers(nextCard);
+                    }
+                    card.moveToPile(pile);
+                }
+            }
+        }
     };
 
     private EventHandler<MouseEvent> stockReverseCardsHandler = e -> {
@@ -189,9 +210,7 @@ public class Game extends Pane {
         }
         System.out.println(msg);
         MouseUtil.slideToDest(draggedCards, destPile);
-        for(Pile item : tableauPiles){
-            item.flipLastTableauCard();
-        }
+
         draggedCards.clear();
     }
 
@@ -260,10 +279,10 @@ public class Game extends Pane {
     public void initRestart() {
         Button restart_btn = new Button();
         restart_btn.setLayoutX(0);
-        restart_btn.setLayoutY(680);
-        restart_btn.setPrefWidth(150);
+        restart_btn.setLayoutY(0);
+        restart_btn.setPrefWidth(80);
         restart_btn.setPrefHeight(50);
-        restart_btn.setText("Restart Game");
+        restart_btn.setText("Restart");
         restart_btn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
